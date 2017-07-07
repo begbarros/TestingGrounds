@@ -7,7 +7,7 @@
 #include "ChooseNextWaypoint.generated.h"
 
 /**
- * 
+ * A route card to help AI choose next waypoint
  */
 UCLASS()
 class TESTINGGROUNDS_API UChooseNextWaypoint : public UBTTaskNode
@@ -20,5 +20,7 @@ public:
 	
 protected:
 	UPROPERTY(EditAnywhere, Category = Blackboard)
-	FBlackboardKeySelector IndexKey;
+	FBlackboardKeySelector WaypointKey;
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+	FBlackboardKeySelector NextIndexKey;
 };
