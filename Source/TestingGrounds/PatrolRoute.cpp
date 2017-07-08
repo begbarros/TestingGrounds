@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PatrollingComponent.h"
+#include "PatrolRoute.h"
 
-TArray<AActor*> UPatrollingComponent::GetPatrolPoints() const
+TArray<AActor*> UPatrolRoute::GetPatrolPoints() const
 {
 	return PatrolPoints;
 }

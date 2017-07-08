@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PatrollingComponent.generated.h"
+#include "PatrolRoute.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TESTINGGROUNDS_API UPatrollingComponent : public UActorComponent
+class TESTINGGROUNDS_API UPatrolRoute : public UActorComponent
 {
 	GENERATED_BODY()
 public:
