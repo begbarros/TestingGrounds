@@ -1,0 +1,48 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Gun.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class TESTINGGROUNDS_API AGun : public AActor
+{
+	GENERATED_BODY()
+	
+public:
+	USceneComponent* GetMuzzleLocation() const;
+
+	void OnFire();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UAnimInstance* AnimInstance;
+
+protected:
+	AGun();
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Muzzle)
+	USkeletalMeshComponent* Gun;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Muzzle)
+	USceneComponent* MuzzleLocation;
+	
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class ABallProjectile> ProjectileClass;
+
+	/** Sound to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class USoundBase* FireSound;
+
+	/** AnimMontage to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UAnimMontage* FireAnimation;
+
+	
+	
+};
