@@ -11,7 +11,7 @@ AGun::AGun()
 	Gun->bCastDynamicShadow = false;
 	Gun->CastShadow = false;
 	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	MuzzleLocation->AttachTo(Gun);
+	MuzzleLocation->AttachToComponent(Gun,FAttachmentTransformRules::KeepRelativeTransform);
 	MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 }
 

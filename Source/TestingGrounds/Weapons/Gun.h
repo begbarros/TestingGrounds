@@ -17,6 +17,7 @@ class TESTINGGROUNDS_API AGun : public AActor
 public:
 	USceneComponent* GetMuzzleLocation() const;
 
+	UFUNCTION(BlueprintCallable, Category= Firing)
 	void OnFire();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
