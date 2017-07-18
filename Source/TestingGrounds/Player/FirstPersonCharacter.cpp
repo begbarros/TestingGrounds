@@ -27,15 +27,15 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	BaseLookUpRate = 45.f;
 
 	// Create a CameraComponent	
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	FPCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FPCameraComponent->SetupAttachment(GetCapsuleComponent());
+	FPCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FPCameraComponent->bUsePawnControlRotation = true;
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
+	Mesh1P->SetupAttachment(FPCameraComponent);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
 	Mesh1P->RelativeRotation = FRotator(1.9f, -19.19f, 5.2f);
@@ -52,13 +52,13 @@ void AFirstPersonCharacter::BeginPlay()
 	if(!ensure(GunBlueprintClass)){UE_LOG(LogTemp,Error,TEXT("No Gun Blueprint class attached to First Person Character")) }
 	if (GunBlueprintClass)
 	{
-		SpawnedGun = GetWorld()->SpawnActor<AGun>(GunBlueprintClass);
-		SpawnedGun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true), FName("GripPoint"));
-		SpawnedGun->AnimInstance = Mesh1P->GetAnimInstance();
+		Gun = GetWorld()->SpawnActor<AGun>(GunBlueprintClass);
+		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true), FName("GripPoint"));
+		Gun->AnimInstance = Mesh1P->GetAnimInstance();
 		//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFirstPersonCharacter::TouchStarted);
 		if (EnableTouchscreenMovement(InputComponent) == false)
 		{
-			InputComponent->BindAction("Fire", IE_Pressed, SpawnedGun, &AGun::OnFire);
+			InputComponent->BindAction("Fire", IE_Pressed, Gun, &AGun::OnFire);
 		}
 	}
 }

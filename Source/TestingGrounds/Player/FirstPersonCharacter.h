@@ -20,7 +20,7 @@ class AFirstPersonCharacter : public ACharacter
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FirstPersonCameraComponent;
+	class UCameraComponent* FPCameraComponent;
 
 public:
 	AFirstPersonCharacter();
@@ -51,7 +51,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AGun> GunBlueprintClass;
 
-	AGun* SpawnedGun;
+	AGun* Gun;
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);
@@ -101,7 +101,7 @@ public:
 	/** Returns Mesh1P subobject **/
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
-	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FPCameraComponent; }
 
 };
 
