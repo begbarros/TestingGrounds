@@ -36,6 +36,11 @@ void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void AMannequin::OnDeath()
+{
+	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_0"));
+}
+
 // Called when the game starts or when spawned
 void AMannequin::BeginPlay()
 {
@@ -45,8 +50,18 @@ void AMannequin::BeginPlay()
 		return;
 	}
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
-	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint")); //Attach gun mesh component to Skeleton, doing it here because the skelton is not yet created in the constructor
-	Gun->AnimInstance = Mesh1P->GetAnimInstance();
+	//Attach gun mesh component to Skeleton, doing it here because the skelton is not yet created in the constructor
+	if (IsPlayerControlled())
+	{
+		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint")); 
+		Gun->AnimInstance1P = Mesh1P->GetAnimInstance();
+
+	}
+	else
+	{
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_0")); 
+		Gun->AnimInstanceTP = GetMesh()->GetAnimInstance();
+	}
 
 	//Because AI does not have an InputComponent
 	if (InputComponent != NULL)

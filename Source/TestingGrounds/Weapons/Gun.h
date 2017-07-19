@@ -20,8 +20,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category= Firing)
 	void OnFire();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimInstance* AnimInstance;
+	UAnimInstance* AnimInstance1P;
+
+	UAnimInstance* AnimInstanceTP;
+
 
 protected:
 	AGun();
@@ -42,8 +44,11 @@ protected:
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimMontage* FireAnimation;
+	class UAnimMontage* FireAnimation1P;
 
+	/** AnimMontage to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UAnimMontage* FireAnimationTP;
 	
 	
 };
