@@ -21,15 +21,20 @@ void ATile::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATile::PlaceActors( TSubclassOf<AActor> ToBeSpawned, int32 min, int32 max)
+void ATile::PlaceActors( TSubclassOf<AActor> ToBeSpawned, float Radius, int32 Min, int32 Max, float MinScale, float MaxScale)
 {
 	//TODO Get Radius for actor
-	float Radius = 500;
-	auto Amount = FMath::RandRange(min, max);
+	
+	auto Amount = FMath::RandRange(Min, Max);
 	for (int i = 0; i < Amount; i++)
 	{
+		auto RandomScale = FMath::RandRange(MinScale, MaxScale);
 		FVector SpawnPoint;
-		if (FindFreeSpace(OUT SpawnPoint, Radius)) { PlaceActor(ToBeSpawned, SpawnPoint); }
+		if (FindFreeSpace(OUT SpawnPoint, Radius * RandomScale)) 
+		{
+			float RandomYaw = FMath::RandRange(-180, 180);
+			PlaceActor(ToBeSpawned, SpawnPoint, RandomYaw , RandomScale);
+		}
 	}
 	/*FVector Min(0, -2000, 0);
 	FVector Max(4000, 2000, 0);
@@ -75,15 +80,17 @@ bool ATile::CanSpawnAt(FVector CandidateLocation, float Radius)
 		ECollisionChannel::ECC_GameTraceChannel2, // Spawn Channel defined in /Config/DefaultEngine.ini 
 		FCollisionShape::MakeSphere(Radius)
 	);
-	bHitSomething ? DrawDebugSphere(GetWorld(), CandidateWorldLocation, Radius, 8, FColor::Red, true) : DrawDebugSphere(GetWorld(), CandidateWorldLocation, Radius, 12, FColor::Green, true); 
+	//bHitSomething ? DrawDebugSphere(GetWorld(), CandidateWorldLocation, Radius, 8, FColor::Red, true) : DrawDebugSphere(GetWorld(), CandidateWorldLocation, Radius, 12, FColor::Green, true); 
 	
 	return !bHitSomething;
 }
 
-void ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint)
+void ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint, float Yaw , float Scale)
 {
 	auto SpawnedObject = GetWorld()->SpawnActor<AActor>(ToBeSpawned);
 	SpawnedObject->SetActorRelativeLocation(SpawnPoint);
+	SpawnedObject->SetActorRotation(FRotator(0, Yaw, 0));
+	SpawnedObject->SetActorScale3D(FVector(Scale));
 	SpawnedObject->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 }
 

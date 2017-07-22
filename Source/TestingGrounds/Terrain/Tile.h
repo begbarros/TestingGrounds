@@ -16,7 +16,7 @@ public:
 	ATile();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void PlaceActors( TSubclassOf<AActor> ToBeSpawned , int32 min, int32 max);
+	void PlaceActors( TSubclassOf<AActor> ToBeSpawned, float Radius = 500 , int32 Min = 1, int32 Max = 1, float MinScale = 1, float MaxScale = 1);
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,7 +26,7 @@ protected:
 
 	bool FindFreeSpace(FVector& OutSpawnPoint, float Radius);
 
-	void PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint);
+	void PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint, float Yaw = 0, float Scale = 1);
 
 private:
 
