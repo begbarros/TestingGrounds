@@ -16,17 +16,20 @@ public:
 	ATile();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void PlaceActor( TSubclassOf<AActor> ToBeSpawned , int32 min, int32 max);
+	void PlaceActors( TSubclassOf<AActor> ToBeSpawned , int32 min, int32 max);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	bool SphereCast(FVector Location, float Radius);
+	bool CanSpawnAt(FVector Location, float Radius);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	bool FindFreeSpace(FVector& OutSpawnPoint, float Radius);
+
+	void PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint);
+
+private:
+
 
 	
 	
