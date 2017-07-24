@@ -8,6 +8,18 @@
 
 class UActorPool;
 
+USTRUCT()
+struct FSpawnParameters
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	FVector SpawnPoint;
+	float Yaw = 0;
+	float Scale = 1;
+
+};
+
 UCLASS()
 class TESTINGGROUNDS_API ATile : public AActor
 {
@@ -25,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	 void SetPool(UActorPool* InNavMeshVolumePool);	
 
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	void PlaceAI(TSubclassOf<APawn> PawnToBeSpawned, float DistanceToOtherObject = 500, int32 Min = 1, int32 Max = 1);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,7 +48,7 @@ protected:
 
 	bool FindFreeSpace(FVector& OutSpawnPoint, float Radius);
 
-	void PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint, float Yaw = 0, float Scale = 1);
+	AActor* PlaceActor(TSubclassOf<AActor> ToBeSpawned, FSpawnParameters SpawnParams);
 
 private:
 
@@ -49,4 +64,5 @@ private:
 
 	void PositionNavMeshBoundsVolume();
 	
+	TArray<FSpawnParameters> GenerateValidPositions(int32 Amount, float Scale, float Radius);
 };

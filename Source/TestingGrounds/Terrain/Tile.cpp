@@ -35,21 +35,44 @@ void ATile::SetPool(UActorPool * InNavMeshVolumePool)
 	NavMeshVolumePool = InNavMeshVolumePool;
 }
 
+
 void ATile::PlaceActors( TSubclassOf<AActor> ToBeSpawned, float Radius, int32 Min, int32 Max, float MinScale, float MaxScale)
 {
-	
 	auto Amount = FMath::RandRange(Min, Max);
+	auto Scale = FMath::RandRange(MinScale, MaxScale);
+	TArray<FSpawnParameters> SpawnPositions = GenerateValidPositions(Amount, Scale, Radius);
+	for (FSpawnParameters Params : SpawnPositions)
+	{
+		PlaceActor(ToBeSpawned, Params);
+	}
+}
+
+TArray<FSpawnParameters> ATile::GenerateValidPositions(int32 Amount, float Scale, float Radius)
+{
+	TArray<FSpawnParameters> SpawnParameters = TArray<FSpawnParameters>();
 	for (int i = 0; i < Amount; i++)
 	{
-		auto RandomScale = FMath::RandRange(MinScale, MaxScale);
-		FVector SpawnPoint;
-		if (FindFreeSpace(OUT SpawnPoint, Radius * RandomScale)) 
+		FSpawnParameters SpawnParams;
+		SpawnParams.Scale = Scale;
+		if (FindFreeSpace(OUT SpawnParams.SpawnPoint, Radius * SpawnParams.Scale))
 		{
-			float RandomYaw = FMath::RandRange(-180, 180);
-			PlaceActor(ToBeSpawned, SpawnPoint, RandomYaw , RandomScale);
+			SpawnParams.Yaw = FMath::RandRange(-180, 180);
+			SpawnParameters.Push(SpawnParams);
 		}
 	}
+	
+	return SpawnParameters;
+}
 
+void ATile::PlaceAI(TSubclassOf<APawn> PawnToBeSpawned, float DistanceToOtherObject, int32 Min, int32 Max)
+{
+	auto Amount = FMath::RandRange(Min, Max);
+	TArray<FSpawnParameters> SpawnPositions = GenerateValidPositions(Amount, 1, DistanceToOtherObject);
+	for (FSpawnParameters Params : SpawnPositions)
+	{
+		APawn* Pawn = Cast<APawn>(PlaceActor(PawnToBeSpawned, Params));
+		Pawn->SpawnDefaultController();
+	}
 }
 
 bool ATile::FindFreeSpace(FVector & OutSpawnPoint, float Radius)
@@ -85,13 +108,14 @@ bool ATile::CanSpawnAt(FVector CandidateLocation, float Radius)
 	return !bHitSomething;
 }
 
-void ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FVector SpawnPoint, float Yaw , float Scale)
+AActor* ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FSpawnParameters SpawnParams)
 {
 	auto SpawnedObject = GetWorld()->SpawnActor<AActor>(ToBeSpawned);
-	SpawnedObject->SetActorRelativeLocation(SpawnPoint);
-	SpawnedObject->SetActorRotation(FRotator(0, Yaw, 0));
-	SpawnedObject->SetActorScale3D(FVector(Scale));
+	SpawnedObject->SetActorRelativeLocation(SpawnParams.SpawnPoint);
+	SpawnedObject->SetActorRotation(FRotator(0, SpawnParams.Yaw, 0));
+	SpawnedObject->SetActorScale3D(FVector(SpawnParams.Scale));
 	SpawnedObject->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	return SpawnedObject;
 }
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -106,6 +130,7 @@ void ATile::PositionNavMeshBoundsVolume()
 	NavMeshVolume->SetActorLocation(GetActorLocation());
 	GetWorld()->GetNavigationSystem()->Build();
 }
+
 
 
 
