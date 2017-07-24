@@ -6,17 +6,24 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
+class UActorPool;
+
 UCLASS()
 class TESTINGGROUNDS_API ATile : public AActor
 {
 	GENERATED_BODY()
 	
+
 public:	
 	// Sets default values for this actor's properties
 	ATile();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void PlaceActors( TSubclassOf<AActor> ToBeSpawned, float Radius = 500 , int32 Min = 1, int32 Max = 1, float MinScale = 1, float MaxScale = 1);
+
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	 void SetPool(UActorPool* InNavMeshVolumePool);	
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,7 +37,16 @@ protected:
 
 private:
 
+	UActorPool* NavMeshVolumePool;
 
+	AActor* NavMeshVolume;
 	
+	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	FVector MinExtent;
+
+	FVector MaxExtent;
+
+	void PositionNavMeshBoundsVolume();
 	
 };
