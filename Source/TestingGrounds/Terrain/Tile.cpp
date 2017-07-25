@@ -114,6 +114,7 @@ bool ATile::CanSpawnAt(FVector CandidateLocation, float Radius)
 AActor* ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FSpawnParameters SpawnParams)
 {
 	auto SpawnedObject = GetWorld()->SpawnActor<AActor>(ToBeSpawned);
+	if (SpawnedObject == nullptr) { return nullptr; }
 	SpawnedObject->SetActorRelativeLocation(SpawnParams.SpawnPoint);
 	SpawnedObject->SetActorRotation(FRotator(0, SpawnParams.Yaw, 0));
 	SpawnedObject->SetActorScale3D(FVector(SpawnParams.Scale));
@@ -123,7 +124,7 @@ AActor* ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FSpawnParameters Spaw
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (NavMeshVolumePool) { NavMeshVolumePool->ReturnActorToPool(NavMeshVolume); }
+	if (NavMeshVolumePool && NavMeshVolume) { NavMeshVolumePool->ReturnActorToPool(NavMeshVolume); }
 }
 
 void ATile::PositionNavMeshBoundsVolume()
