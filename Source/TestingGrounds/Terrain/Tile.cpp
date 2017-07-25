@@ -71,6 +71,9 @@ void ATile::PlaceAI(TSubclassOf<APawn> PawnToBeSpawned, float DistanceToOtherObj
 	for (FSpawnParameters Params : SpawnPositions)
 	{
 		APawn* Pawn = Cast<APawn>(PlaceActor(PawnToBeSpawned, Params));
+		if (!ensure(Pawn)){return;
+
+		}
 		Pawn->SpawnDefaultController();
 	}
 }

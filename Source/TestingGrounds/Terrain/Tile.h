@@ -30,14 +30,14 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = Spawning)
 	void PlaceActors( TSubclassOf<AActor> ToBeSpawned, float Radius = 500 , int32 Min = 1, int32 Max = 1, float MinScale = 1, float MaxScale = 1);
 
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
+	UFUNCTION(BlueprintCallable, Category = Spawning)
 	 void SetPool(UActorPool* InNavMeshVolumePool);	
 
-	UFUNCTION(BlueprintCallable, Category = "AI")
+	UFUNCTION(BlueprintCallable, Category = Spawning)
 	void PlaceAI(TSubclassOf<APawn> PawnToBeSpawned, float DistanceToOtherObject = 500, int32 Min = 1, int32 Max = 1);
 
 protected:
