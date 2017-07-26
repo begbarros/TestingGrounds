@@ -113,10 +113,8 @@ bool ATile::CanSpawnAt(FVector CandidateLocation, float Radius)
 
 AActor* ATile::PlaceActor(TSubclassOf<AActor> ToBeSpawned, FSpawnParameters SpawnParams)
 {
-	auto SpawnedObject = GetWorld()->SpawnActor<AActor>(ToBeSpawned);
+	auto SpawnedObject = GetWorld()->SpawnActor<AActor>(ToBeSpawned,SpawnParams.SpawnPoint, FRotator(0, SpawnParams.Yaw, 0));
 	if (SpawnedObject == nullptr) { return nullptr; }
-	SpawnedObject->SetActorRelativeLocation(SpawnParams.SpawnPoint);
-	SpawnedObject->SetActorRotation(FRotator(0, SpawnParams.Yaw, 0));
 	SpawnedObject->SetActorScale3D(FVector(SpawnParams.Scale));
 	SpawnedObject->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	return SpawnedObject;
